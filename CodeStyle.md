@@ -101,3 +101,86 @@
 <br/><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;9.5Replace Array With Object以对象取代数组:①如果有一个数组，如字符串数组，其中的元素各代表不同的东西，则考虑将这个数组封装成一个对象。
 <br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.6Duplicate Observed Data复制被监视的对象:①将数据展示与数据计算逻辑分离开来，将数据展示里的数据复制一份到数据计算逻辑中，并使用观察者Observer模式维护两份数据的一致性。这样数据计算的修改就不会影响数据展示。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.7Replace Magic Number With Symbolic Constant以字面常量取代魔法数:①如果一个字面数值有特别含义，则创造一个常量并根据意义命名以取代那个魔法数。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.8Encapsulate Field封装字段:①如果类中有public字段，则将其改成private并提供相应的访问方法。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.9Encapsulate Collection封装集合:①如果一个函数返回集合，则让该函数返回集合的只读副本并在这个类中提供添加/移除集合元素的函数。因为如果不这样会让集合拥有着无法控制集合本身且对用户暴露太多对象内部数据。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.10Replace Type Code With Subclasses:①如果类中有一个不可变的类型码如枚举值，它会影响类的行为，则以子类取代这个类型码。这是多态的体现。处理Switch和if-else-if语句需要这样做。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.11Replace Type Code With State/Strategy:①如果一个类型码会影响类的行为且无法通过继承手段消除，则以状态对象取代类型码。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;9.12Replace Subclass With Fields以字段取代子类:①如果各个子类的唯一区别就是返回常量数据的函数上，则删除子类，并在父类中增加字段用以区别，使得函数直接返回这些字段。
+<br/><br/>
+
+ - 10简化条件表达式  
+&nbsp;&nbsp;&nbsp;&nbsp;10.1Decompose Conditional分解条件表达式:①如果有一个复杂的if-then-else语句，则从if/then/else三个段落中分别提炼成独立函数。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;10.2Consolidate Conditional Expression合并条件表达式:①如果多个if返回的结果都相同，则将这些全部合并并提炼为一个独立函数。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;10.3Consolidate Duplicate Conditional Framents合并重复的条件片段:①如果几个条件中有相同的语句代码，则将这些代码搬移到条件语句之外。这样能清晰表示哪些因条件而变化。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;10.4Replace Nested Conditional With Guard Clauses用卫语句取代嵌套条件表达式:①卫语句就是把复杂的条件表达式拆分成多个条件表达式，比如一个很复杂的表达式，嵌套了好几层的if-then-else语句，转换为多个if语句，实现它的逻辑，这多条的if语句就是卫语句。if语句可使用卫语句减少层级嵌套。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;10.5Replace Conditional With Polymorphism以多态取代条件表达式:①如果有个条件表达式是根据对象的类型不同而选择不同的行为，则将这个表达式的每个分支放进一个子类内的覆写函数中，然后将原始函数声明为抽象函数。这样可以处理类型码的switch语句和基于类型名称的if-then-else语句。但这个改造必须有一个继承结构，如果没有的话现在就需要建立。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;10.6Introduce Null Object引入Null对象:①在很多需要判断==null的地方引入Null对象，也可以是Null接口，里面有isNull函数，这样就可以用函数替换==null判断。
+<br/><br/>
+
+ - 11简化函数调用  
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.1Rename Method函数改名:①如果函数的名称不能阐述其用途就修改这个函数的名字。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.2Add Parameter添加参数:①如果某个函数需要从调用端获取更多信息，则为这个函数添加一个对象参数让此对象参数携带参数。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.3Remove Parameter移除参数:①如果函数体不再需要某个参数则将这个参数移除掉。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.4Separate Query From Modifier将查询函数与修改函数分离:①如果某个函数既返回对象状态值又修改对象状态，则将这个函数一分为二，一个负责查询，一个负责修改，可额外新增一个函数将这两个函数包裹。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.5Encapsulate Downcast封装向下转型:①如果函数返回的对象需要强制类型转换，则在函数中进行转换，而不要让调用者得到返回值后自己执行类型转换，这样可以向用户隐藏细节。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.6Replace Error Code With Exception以异常取代错误码:①如果函数返回某个特定的代码用以表示某种错误情况，则直接改成异常抛出。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;11.7Replace Exception With Test以测试取代异常:①参照【11.6】，异常通常是用在异常的、不符合常规行为的地方，而不是替代if检查，如果希望在合理调用前检查一下某个条件，就用if而不是异常。
+<br/><br/>
+
+
+ - 12处理继承关系  
+&nbsp;&nbsp;&nbsp;&nbsp;12.1Pull up Field字段上移:①如果子类拥有相同的字段，就将这些字段移到超类中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.2Pull up Method函数上移:①如果有些函数在各个子类中行为一致，则上移到超类中，可以得话，将它们声明为模板函数。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.3Pull up Constructor Body构造函数本体上移:①如果各个子类中的构造函数行为一致，则将它们上移动到超类中，并在子类中调用它们。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.4Push down Method函数下移:①如果某些函数只与部分子类有关，则将它们移到那些相关子类中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.5Push down Field字段下移:①如果某些字段只与部分子类有关，则将它们移到那些相关子类中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.6Extract Subclass提炼子类:①如果类的某些特性只被部分实例用到，则新建一个子类并将那些特性移到这个子类中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.7Extract Superclass提炼超类:①如果两个类有相似特性，则为这两个类创建一个超类并移动相似特性到超类中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.8Extract Interface提炼接口:①如果两个类的接口有相同或客户端只使用了类的部分子集，则提炼它们到独立接口中。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.9Collapse Hierarchy折叠继承体系:①如果类与子类无太大差别，则将它们合为一体。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.10Form Template Method塑造模板方法:①如果某些类函数行为一致但又有细微差别，则将它们定义为抽象方法提炼到超类中组成模板方法。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.11Replace Inheritance With Delegation以委托取代继承:①如果子类只需要超类接口中的一部分或根本不需要继承而来的数据，则在子类中创建一个父类的引用，然后修改所有继承的函数改成调用引用的函数，最后去掉继承关系。这样就完成了委托关系。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;12.12Replace Delegation With Inheritance以继承取代委托:①如果两个类之间是委托关键，但经常需要为整个接口增加很多简单的委托函数，则让委托类继承受托类。
+<br/><br/>
+
+ - 13大型重构  
+&nbsp;&nbsp;&nbsp;&nbsp;13.1Tease Apart Inheritance梳理并分解继承体系:①如果某个继承体系同时承担两个责任，则建立两个继承体系并通过委托关系让一个可以调用另一个。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;13.2Convert Procedural Design To Objects将过程化设计转换为对象设计:①如果有一些传统过程化风格的代码，则将数据记录变成数据对象，将大块行为分成小块，并将行为移入相关数据对象之中，最后移除这种过程化风格的类。
+<br/><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;13.3Extract Hierarchy提炼继承体系:①如果有个类做了太多的工作，其中一部分工作是以大量条件表达式完成的，则建立继承体系，以一个子类表示一种特殊情况。
+<br/><br/>
+
+## 四、后献上面向对象的三大基本特征  
+#### 封装、继承、多态
