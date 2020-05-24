@@ -206,3 +206,30 @@ IDEA变量命名OnlineSearch CODEIF
 &nbsp;&nbsp;&nbsp;&nbsp;6.1.4一致性：要保持命名一致性，每个概念对应一个词并一以贯之，如新增对应create/添加对应add/删除对应remove/修改对应update/查询单个对应get/查询多个对应list/分页对应page/统计对应conut  
 &nbsp;&nbsp;&nbsp;&nbsp;6.1.5后置限定词：如果程序中有表示计算结果的变量，如总额、平均值、最大值等，如果要用Total/Sum/Average等限定词来修改某个命名，则把限定词放到名字的后面。如expenseTotal总支出、revenueTotal总收入。  
 &nbsp;&nbsp;&nbsp;&nbsp;6.1.6注释：注释不要复述功能，这样没有用，要多解释背后的意图，比如注释“这里等待2秒”和没写一样，不如改成“休息2秒，为了等待关联系统处理结果”。  
+- 6.2日志  
+&nbsp;&nbsp;&nbsp;&nbsp;6.2.1日志级别：详细的日志输出级别分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL或者自定义的级别。比较有用的4个级别依次是ERROR、WARN、INFO和DEBUG。  
+&nbsp;&nbsp;&nbsp;&nbsp;6.2.2Error级别：ERROR表示不能自己恢复的错误，需要立即被关注和解决。ERROR要接入监控和报警系统。ERROR需要人工介入处理，及时止损，否则会影响系统的可用性。当然也不能滥用ERROR，否则就会出现“狼来了”的情况。  
+&nbsp;&nbsp;&nbsp;&nbsp;6.2.Warn级别：对于可预知的业务问题，最好不要用ERROR输出日志，以免污染报警系统。例如，参数校验不通过、没有访问权限等业务异常，就不应该用ERROR输出。　　
+&nbsp;&nbsp;&nbsp;&nbsp;6.2.Info级别：用于记录系统的基本运行过程和运行状态。通常根据INFO日志可初步定位，主要包括系统状态变
+化日志、业务流程的核心处理、关键动作和业务流程的状态变化。适当的INFO可以协助我们排查问题，但是切忌把INFO当成DEBUG使用。
+&nbsp;&nbsp;&nbsp;&nbsp;6.2.Debug级别：输出调试信息，如request/response的对象内容。  
+ -6.3异常
+&nbsp;&nbsp;&nbsp;&nbsp;6.3.1统一异常处理：有统一的异常处理规范，切勿代码中到处充斥着异常捕获的try/catch的代码，搞乱了代码结
+构，把错误处理与正常流程混为一谈，严重影响了代码的可读性。有的场景对外直接抛出异常，有的场景对外返回错误码，会增加了服务的使用成本和沟通成本。
+&nbsp;&nbsp;&nbsp;&nbsp;6.3.2业务异常和系统异常：建议在业务系统中设定两个异常，分别是BizException（业务异常）和SysException（系统异常），而且这两个异常都应该是Unchecked Exception。针对业务异常和系统异常要做统一的异常处理，类似于AOP，在应用处理请求的切面上进行异常处理收敛。  
+```
+	try {
+		 //业务处理
+		 Response res = process(request);
+	} catch (BizException e) {
+		//业务异常使用WARN级别
+		logger.warn("BizException with error code:{},error message:{}", e.getErrorCode(), e.getErrorMsg());
+	} catch (SysException ex) {
+		//系统异常使用ERROR级别
+		log.error("System error" + ex.getMessage(), ex);
+	} catch (Exception ex) {
+		//兜底
+		log.error("System error" + ex.getMessage(), ex);
+	}
+```  
+&nbsp;&nbsp;&nbsp;&nbsp;6.3.3错误码：针对不同错误类型，可以参考做如下约定：P代表参数异常（ParamException）、B代表业务异常（BizException）、S代表系统异常（SystemException）。例如参数异常P_XX_XX  P_Customer_NameIsNull（客户姓名不能为空）/业务异常B_XX_XX  B_Customer_NameAlreadyExist（客户姓名已存在）/系统异常S_XX_XX  S_Unknow_Error（未知系统错误）
